@@ -719,6 +719,12 @@ changeModal2.addEventListener('click', function(){
                         <td>false</td>
                         <td>Option to keep the dropdown-menu open when <code>click</code> event targets a child element, useful for forms or interactive content. Use <code>data-persist="true"</code> attribute to enable this functionality via DATA-API.</td>
                       </tr>
+                      <tr>
+                        <td><code>trigger</code></td>
+                        <td><em>string</em></td>
+                        <td>click</td>
+                        <td>Option to change the component's action trigger event: <em>click</em> or <em>hover</em>. In some cases you might want to open a dropdown on hover. You can specify vai JavaScript or <code>data-trigger="hover"</code> attribute.</td>
+                      </tr>
                   </tbody>
                 </table>
               </div>
@@ -860,6 +866,17 @@ myDropdownInit.toggle();
               <div class="btn-group" style="margin-bottom:10px">
                 <div class="dropdown">
                   <button class="btn btn-primary" id="myDropdown" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown trigger <span class="caret"></span></button>
+                  <ul class="dropdown-menu" aria-labelledby="myDropdown">
+                    <li role="presentation"><a role="menuitem" href="#">Action</a></li>
+                    <li role="presentation"><a role="menuitem" href="#">Another action</a></li>
+                    <li role="presentation"><a role="menuitem" href="#">Something else here</a></li>
+                  </ul>
+                </div>
+              </div>
+              <p>Or trigger it via hovering over.</p>
+              <div class="btn-group" style="margin-bottom:10px">
+                <div class="dropdown">
+                  <button class="btn btn-primary" id="myDropdown" type="button" data-toggle="dropdown" data-trigger="hover" aria-haspopup="true" aria-expanded="false">Hover Dropdown <span class="caret"></span></button>
                   <ul class="dropdown-menu" aria-labelledby="myDropdown">
                     <li role="presentation"><a role="menuitem" href="#">Action</a></li>
                     <li role="presentation"><a role="menuitem" href="#">Another action</a></li>
