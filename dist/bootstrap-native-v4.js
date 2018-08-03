@@ -808,19 +808,36 @@
   
   // DROPDOWN DEFINITION
   // ===================
-  var Dropdown = function( element, option ) {
+  var Dropdown = function( element, options ) {
       
     // initialization element
     element = queryElement(element);
   
-    // set option
-    this.persist = option === true || element[getAttribute]('data-persist') === 'true' || false;
+    // set options
+    options = options || {};
+    
+    // set trigger option
+    var triggerData = element[getAttribute](dataTrigger), // click / hover
+        persistData = element[getAttribute]('data-persist'),
+  
+        // internal strings
+        persist = 'persist',
+        trigger = 'trigger';
+  
+    // backwards compatibility
+    if (options === true) {
+      options = { persist: true };
+    }
+  
+    this[trigger] = options[trigger] ? options[trigger] : triggerData || clickEvent;
+    this[persist] = options[persist] ? options[persist] : persistData === 'true' || false;
   
     // constants, event targets, strings
     var self = this, children = 'children',
       parent = element[parentNode],
       component = 'dropdown', open = 'open',
       relatedTarget = null,
+      hoverOutHandle = null,
       menu = queryElement('.dropdown-menu', parent),
       menuItems = (function(){
         var set = menu[children], newSet = [];
@@ -887,6 +904,20 @@
           relatedTarget = null;
         }
       },
+      hoverInHandler = function(e) {
+        if (hoverOutHandle) {
+          clearTimeout(hoverOutHandle);
+          hoverOutHandle = null;
+        }
+        clickHandler(e);
+      },
+      hoverOutHandler = function(e) {
+        hoverOutHandle = setTimeout(function() {
+          if (hasClass(parent,showClass) && element[open]) {
+            dismissHandler(e);
+          }
+        }, 300)
+      },
   
       // private methods
       show = function() {
@@ -926,7 +957,12 @@
     // init
     if ( !(stringDropdown in element) ) { // prevent adding event handlers twice
       !tabindex in menu && menu[setAttribute](tabindex, '0'); // Fix onblur on Chrome | Safari
-      on(element, clickEvent, clickHandler);
+      if (self[trigger] === hoverEvent) {
+        on( parent, mouseHover[0], hoverInHandler );
+        on( parent, mouseHover[1], hoverOutHandler );
+      } else if (clickEvent == self[trigger]) {
+        on( element, self[trigger], clickHandler );
+      }
     }
   
     element[stringDropdown] = self;
